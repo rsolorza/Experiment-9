@@ -27,7 +27,6 @@ entity Mux_2x1 is
            B : in STD_LOGIC_VECTOR (7 downto 0);
            SEL : in STD_LOGIC;
            OUTPUT : out STD_LOGIC_VECTOR (7 downto 0));
-
 end Mux_2x1;
 
 architecture Behavioral of Mux_2x1 is

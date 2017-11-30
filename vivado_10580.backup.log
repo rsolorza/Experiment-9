@@ -1,0 +1,20 @@
+#-----------------------------------------------------------
+# Vivado v2017.2 (64-bit)
+# SW Build 1909853 on Thu Jun 15 18:39:09 MDT 2017
+# IP Build 1909766 on Thu Jun 15 19:58:00 MDT 2017
+# Start of session at: Fri Nov  3 11:52:05 2017
+# Process ID: 10580
+# Current directory: D:/Experiment-9
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13692 D:\Experiment-9\Experiment 9.xpr
+# Log file: D:/Experiment-9/vivado.log
+# Journal file: D:/Experiment-9\vivado.jou
+#-----------------------------------------------------------sstart_guioopen_project {D:/Experiment-9/Experiment 9.xpr}SScanning sources...FFinished scanning sourcesIINFO: [IP_Flow 19-234] Refreshing IP repositoriesIINFO: [IP_Flow 19-1704] No user IP repositories specifiedINFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.2/data/ip'.
+Wopen_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:19 . Memory (MB): peak = 739.227 ; gain = 38.156
+update_compile_order -fileset sources_1
+exit
+INFO: exit
+INFO: [Common 17-206] Exiting Vivado at Fri Nov  3 11:53:10 2017...
+led: ERROR: [Common 17-685] Unable to load Tcl app xilinx::modelsim
+
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Nov  3 11:52:56 2017...

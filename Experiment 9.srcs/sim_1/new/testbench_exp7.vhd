@@ -64,29 +64,17 @@ architecture Behavioral of testbench_exp7 is
                 wait for 1ns;
             end process;
         
-        
-        
         number_process : process
             begin
-                switches <= "0000000001000011";
-                buttons <= "0000";
-                reset <= '0';
-                wait for 40ns;
-                
-                switches <= "0000000000001111";
-                buttons <= "0000";
-                reset <= '0';
-                wait for 40ns;                
-                
-                switches <= "1000000001111111";
-                buttons <= "0000";
-                reset <= '0';
-                wait for 40ns;
-                
                 switches <= "0000000000000000";
                 buttons <= "0000";
                 reset <= '0';
-                wait for 40ns;                
+                wait for 20ns;
+                
+                switches <= "0000000000000000";
+                buttons <= "0001";
+                reset <= '0';
+                wait for 120ns;                           
                 
             end process; 
     

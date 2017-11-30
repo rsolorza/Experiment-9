@@ -68,7 +68,7 @@ end;
 
 architecture Behavioral of CONTROL_UNIT is
 
-   type state_type is (ST_init, ST_fet, ST_exec);
+   type state_type is (ST_init, ST_fet, ST_exec, ST_interrupt);
    signal PS,NS : state_type;
    
    signal sig_OPCODE_7: std_logic_vector (6 downto 0);
@@ -90,7 +90,7 @@ begin
    end process sync_p;
 
 
-   comb_p: process (sig_OPCODE_7, PS, C, Z)
+   comb_p: process (sig_OPCODE_7, PS, C, Z, INT)
    begin
    
     	-- schedule everything to known values -----------------------
@@ -143,8 +143,12 @@ begin
             
       -- STATE: the execute cycle ---------------------------------
       when ST_exec => 
-         NS <= ST_fet;
-         PC_INC <= '0';  -- don't increment PC
+            if (INT = '0') then 
+                NS <= ST_fet;
+                PC_INC <= '0';  -- don't increment PC
+            else
+                NS <= ST_interrupt;
+            end if;
 				
 	     case sig_OPCODE_7 is
 	     -- ADD reg-reg ------------
@@ -232,9 +236,13 @@ begin
                     SCR_DATA_SEL <= '1';
                     SCR_WR <= '1';
                     SCR_ADDR_SEL <= "11";
-          -- CLC -------------------
+          -- CLC  None---------------
                 when "0110000" =>
                     FLG_C_CLR <= '1';
+          
+          -- CLI  None---------------
+                when "0110101" =>
+                    I_CLR <= '1';
          
           -- CMP reg-reg -----------
                 when "0001000" => 
@@ -356,6 +364,28 @@ begin
                     PC_LD <= '1';
                     PC_MUX_SEL <= "01";
         
+        -- RETID None -----------
+                when "0110110" => 
+                    I_CLR <= '1';
+                    FLG_LD_SEL <= '1';
+                    FLG_C_LD <= '1';
+                    FLG_Z_LD <= '1';
+                    SP_INCR <= '1';
+                    PC_LD <= '1';
+                    PC_MUX_SEL <= "01";
+                    SCR_ADDR_SEL <= "10";
+        
+        -- RETIE None -----------
+                when "0110111" => 
+                    FLG_LD_SEL <= '1';
+                    FLG_C_LD <= '1';
+                    FLG_Z_LD <= '1';
+                    SP_INCR <= '1';
+                    PC_LD <= '1';
+                    PC_MUX_SEL <= "01";
+                    SCR_ADDR_SEL <= "10";
+                    I_SET <= '1';
+        
         -- ROL reg --------------
                 when "0100010" => 
                     RF_WR <= '1';
@@ -382,6 +412,10 @@ begin
         -- SEC None --------------
                 when "0110001" =>
                     FLG_C_SET <= '1';
+        
+        -- SEI None --------------
+                when "0110100" =>
+                    I_SET <= '1';
                     
         -- ST reg-reg ------------
                 when "0001011" => 
@@ -454,11 +488,22 @@ begin
 
             end case; -- inner execute case statement
 
+        -- STATE: the interrupt cycle ------------------------------
+        when ST_interrupt =>
+            PC_LD <= '1';
+            PC_MUX_SEL <= "10";
+            SP_DECR <= '1';
+            SCR_DATA_SEL <= '1';
+            SCR_WR <= '1';
+            SCR_ADDR_SEL <= "11";
+            FLG_SHAD_LD <= '1';
+            I_CLR <= '1';
+            
+            NS <= ST_fet;
 
           when others =>    -- for outer case
                NS <= ST_fet;		    
 			 
-				 
 	    end case;  -- outer init/fetch/execute case
        
    end process comb_p;

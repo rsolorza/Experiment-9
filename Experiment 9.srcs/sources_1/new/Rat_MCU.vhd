@@ -112,7 +112,7 @@ architecture Behavioral of RAT_MCU is
              FROM_STACK : in std_logic_vector (9 downto 0); 
              FROM_INTRR : in std_logic_vector (9 downto 0); 
              PC_MUX_SEL : in std_logic_vector (1 downto 0); 
-                  CNT   : out std_logic_vector (9 downto 0)); 
+                    CNT : out std_logic_vector (9 downto 0)); 
    end component; 
     
     component Flags
@@ -169,9 +169,20 @@ architecture Behavioral of RAT_MCU is
                  DIN : in std_logic_vector (7 downto 0); 
             DATA_OUT : out std_logic_vector (7 downto 0));
     end component;
+    
+    component FlagReg is 
+            port ( D    : in  STD_LOGIC; --flag input
+                   LD   : in  STD_LOGIC; --load Q with the D value
+                   SET  : in  STD_LOGIC; --set the flag to '1'
+                   CLR  : in  STD_LOGIC; --clear the flag to '0'
+                   CLK  : in  STD_LOGIC; --system clock
+                   Q    : out  STD_LOGIC); --flag output
+        end component;
         
    -- intermediate signals ----------------------------------  
    signal s_inst_reg : std_logic_vector(17 downto 0) := (others => '0'); 
+   signal i_out : std_logic := '0';
+   signal control_int : std_logic := '0';
  
    -- signals into PC ----------------------------------------
    signal pc_mux_input : std_logic_vector(9 downto 0) := (others => '0');
@@ -259,7 +270,7 @@ begin
    port map ( CLK           => CLK, 
               C             => carry_flag, 
               Z             => z_flag, 
-              INT           => INT, 
+              INT           => control_int, 
               RESET         => RESET, 
               OPCODE_HI_5   => s_inst_reg(17 downto 13), 
               OPCODE_LO_2   => s_inst_reg(1 downto 0), 
@@ -374,7 +385,16 @@ begin
                         DECR => sp_dec, 
                          DIN => dx_out, 
                     DATA_OUT => sp_data_out);
-              
+                    
+    interrupt: FlagReg 
+            port map( D => '0',
+                      LD   => '0',
+                      SET  => i_flag_set, 
+                      CLR  => i_flag_clr, 
+                      CLK  => CLK,
+                      Q    => i_out);
+                       
+    control_int <= INT and i_out;
               
 
 end Behavioral;

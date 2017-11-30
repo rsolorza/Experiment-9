@@ -46,23 +46,69 @@ architecture Behavioral of Flags is
                CLK  : in  STD_LOGIC; --system clock
                Q    : out  STD_LOGIC); --flag output
     end component;
+    
+    component Mux_2x1_1bit is
+        Port ( A : in STD_LOGIC;
+               B : in STD_LOGIC;
+               SEL : in STD_LOGIC;
+               OUTPUT : out STD_LOGIC);
+    end component;
+
+
+    signal z_shad : std_logic; 
+    signal c_shad : std_logic;
+    signal z_out : std_logic;
+    signal c_out : std_logic;
+    signal c_mux_out : std_logic;
+    signal z_mux_out : std_logic;
 
 begin
 
+    C_FLAG <= c_out;
+    Z_FLAG <= z_out;
+    
     my_cFlag : FlagReg
-        port map ( D   => C,
+        port map ( D   => c_mux_out,
                    LD  => FLG_C_LD,
                   SET  => FLG_C_SET,
                   CLR  => FLG_C_CLR,
                   CLK  => CLK,
-                   Q   => C_FLAG);
+                   Q   => c_out);
 
     my_ZFlag : FlagReg
-        port map ( D   => Z,
+        port map ( D   => z_mux_out,
                    LD  => FLG_Z_LD,
                   SET  => '0',
                   CLR  => '0',
                   CLK  => CLK,
-                   Q   => Z_FLAG);                   
+                   Q   => z_out);                   
+
+    my_shad_z : FlagReg
+        port map ( D   => z_out,
+                   LD  => FLG_SHAD_LD,
+                  SET  => '0',
+                  CLR  => '0',
+                  CLK  => CLK,
+                   Q   => z_shad);
+                   
+    my_shad_c : FlagReg
+        port map ( D   => c_out,
+                   LD  => FLG_SHAD_LD,
+                  SET  => '0',
+                  CLR  => '0',
+                  CLK  => CLK,
+                   Q   => c_shad);
+                   
+    c_flag_mux : Mux_2x1_1bit
+        Port map ( A => C,
+                   B => c_shad,
+                   SEL => FLG_LD_SEL,
+                   OUTPUT => c_mux_out);
+
+    z_flag_mux : Mux_2x1_1bit
+        Port map ( A => Z,
+                   B => z_shad,
+                   SEL => FLG_LD_SEL,
+                   OUTPUT => z_mux_out);
                    
 end Behavioral;

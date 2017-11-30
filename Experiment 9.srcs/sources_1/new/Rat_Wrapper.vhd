@@ -114,7 +114,7 @@ begin
               PORT_ID  => s_port_id,
               RESET    => RESET,  
               IO_STRB  => s_load,
-              INT      => '0',
+              INT      => BUTTONS(0),
               CLK      => s_clk);         
    -------------------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ begin
       elsif (s_port_id = SWITCHES_HI_ID) then
             s_input_port <= SWITCHES(15 downto 8);
       elsif (s_port_id = BUTTONS_ID) then 
-         s_input_port <= "0000" & BUTTONS; 
+         s_input_port <= "00000" & BUTTONS(3 downto 1); 
       else
          s_input_port <= x"00";
       end if;

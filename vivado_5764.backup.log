@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# Vivado v2017.2 (64-bit)
+# SW Build 1909853 on Thu Jun 15 18:39:09 MDT 2017
+# IP Build 1909766 on Thu Jun 15 19:58:00 MDT 2017
+# Start of session at: Wed Nov  8 11:18:39 2017
+# Process ID: 5764
+# Current directory: D:/Experiment-9
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent13592 D:\Experiment-9\Experiment 9.xpr
+# Log file: D:/Experiment-9/vivado.log
+# Journal file: D:/Experiment-9\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project {D:/Experiment-9/Experiment 9.xpr}
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.2/data/ip'.
+open_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 784.168 ; gain = 95.031
+update_compile_order -fileset sources_1
+save_project_as Experiment-10 D:/Experiment-10 -force
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+INFO: [Common 17-344] 'save_project_as' was cancelled
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed Nov  8 11:24:39 2017...
